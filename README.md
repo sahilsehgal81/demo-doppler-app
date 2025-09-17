@@ -29,35 +29,7 @@ roles:
 7. **Doppler**: Secret and configuration management tool used for managing application secrets and environment variables.
 
 
-## Architecture Diagram
 
-```mermaid
-flowchart TD
-   User[User]
-   Internet[Internet]
-   LB[Load Balancer (NLB)]
-   EC2[EC2 Instance(s)]
-   Docker[Docker Container: Node.js App]
-   Doppler[Doppler (Secrets)]
-   SSM[AWS SSM Parameter Store]
-   GitHub[GitHub Repo]
-   Ansible[Ansible]
-   Terraform[Terraform]
-   AWS[AWS Cloud]
-
-   User -->|HTTP/HTTPS| Internet
-   Internet --> LB
-   LB --> EC2
-   EC2 --> Docker
-   Docker -->|Reads secrets| Doppler
-   Doppler -->|Token| SSM
-   GitHub -->|CI/CD| Ansible
-   Ansible --> EC2
-   Terraform --> AWS
-   AWS --> LB
-   AWS --> EC2
-   AWS --> SSM
-```
 
 ## Infrastructure Setup
 
