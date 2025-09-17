@@ -1,0 +1,14 @@
+ # Hadolint configuration file
+ # See: https://github.com/hadolint/hadolint/blob/master/docs/configuration.md
+
+failure-threshold: warning  # Minimum level of issue to report (error, warning, info, style, ignore, none)
+
+override:
+  error:
+    - DL3008  # Pin versions in apt-get install
+
+trustedRegistries:
+  - docker.io  # List of trusted registries for FROM instructions
+
+ignored:
+  - DL3000  # Ignore error DL3000 (Use absolute WORKDIR)

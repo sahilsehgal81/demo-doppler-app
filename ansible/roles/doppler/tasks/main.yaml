@@ -1,0 +1,35 @@
+
+# Install required dependencies for Doppler CLI
+- name: Install required packages
+  apt:
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+    state: present
+
+# Add Doppler's official GPG key
+- name: Add Doppler GPG key
+  apt_key:
+    url: https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key
+    state: present
+  become: yes
+
+# Add Doppler APT repository to sources list
+- name: Add Doppler APT repository
+  copy:
+    content: "deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main\n"
+    dest: /etc/apt/sources.list.d/doppler-cli.list
+  become: yes
+
+    #- name: Update apt cache after adding Doppler repository
+    #apt:
+    #update_cache: yes
+
+# Install Doppler CLI
+- name: Install Doppler
+  apt:
+    name: doppler
+    state: present
+
