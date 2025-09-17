@@ -82,21 +82,31 @@ roles:
 1. **Clone Repository and Deploy**:
    - SSH into the server: `ssh ubuntu@IP -i $PRIVATE_KEY_PATH`.
    - Clone the repository: `git clone https://github.com/anshultaak/demo-app.git`.
-   - Run the `taskfile.yaml` to deploy the application.
-     - Use `task deploy_app` command to deploy the application.
-     - Use `task clean` command to clean the running Docker containers.
 
-## Taskfile.yaml Explanation
+    - Use the `Taskfile.yaml` (located at `app/Taskfile.yaml`) to automate application deployment and management.
+       - Run `cd app` to enter the app directory.
+       - Use `task deploy_app` to deploy the application.
+       - Use `task clean` to clean up running Docker containers.
 
-1. **Environment Configuration**:
-   - Define environment variables in the YAML file:
-     - `container_name`: Name of the application container.
-     - `hadolint_config`: Path to the Hadolint YAML file.
-     - `hadolint_image`: Name of the Hadolint Docker image.
-     - `local_port`: Local server port to access the application.
-     - `container_port`: Port inside the Docker container.
+## Taskfile.yaml (app/Taskfile.yaml)
 
-2. **Tasks**:
+This file defines automation tasks for building, linting, deploying, and testing the application using the [Task](https://taskfile.dev/) runner.
+
+**Key Variables:**
+- `container_name`: Name of the application container.
+- `hadolint_config`: Path to the Hadolint YAML file.
+- `hadolint_image`: Name of the Hadolint Docker image.
+- `local_port`: Local server port to access the application.
+- `container_port`: Port inside the Docker container.
+
+**Key Tasks:**
+- `build`: Build the Docker image.
+- `lint`: Lint the Dockerfile using Hadolint.
+- `deploy`: Run the container locally without Doppler secrets.
+- `deploywithdoppler`: Run the container with Doppler secrets.
+- `test`: Run the test script to check application functionality.
+- `clean`: Remove the running application container.
+- `deploy_app`: Run the full deployment pipeline (clean, build, lint, deploywithdoppler, test).
    - **build**: Docker image build command.
    - **lint**: Review Dockerfile using Hadolint for code quality.
    - **deploy**: Deploy the application without Doppler environment.
