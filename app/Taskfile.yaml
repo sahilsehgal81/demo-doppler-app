@@ -1,0 +1,75 @@
+version: '3' # Taskfile version
+
+# Global variables
+vars:
+  container_name: webapp # Name of the Docker container
+  hadolint_config: ./hadolint.yaml # Path to Hadolint config
+  hadolint_image: hadolint/hadolint # Hadolint Docker image
+  local_port: 80 # Local port to map
+  container_port: 3000 # Port inside the container
+
+# Task definitions
+tasks:
+  clean:
+    desc: "Stop and remove the {{.container_name}} container"
+    cmds:
+      - docker stop {{.container_name}} || true # Stop container if running
+      - docker rm {{.container_name}} || true   # Remove container if exists
+    ignore_error: true # Ignore errors if container doesn't exist
+
+  build:
+    desc: "Build the {{.container_name}} Docker image"
+    cmds:
+      - docker build -t {{.container_name}} . # Build Docker image
+
+  lint:
+    desc: "Lint the Dockerfile using Hadolint"
+    cmds:
+      - docker run --rm -i -v {{.hadolint_config}}:/.config/hadolint.yaml {{.hadolint_image}} < Dockerfile # Lint Dockerfile
+
+  deploy:
+    desc: "Run the {{.container_name}} container locally"
+    cmds:
+      - docker run -d --name {{ .container_name}} -p {{.local_port}}:{{.container_port}} -e WEBTEXT="Development deploy without doppler" {{.container_name}} # Run container without Doppler
+
+  deploywithdoppler:
+    desc: "Run the {{.container_name}} container with Doppler"
+    cmds:
+      - docker run -d --name {{ .container_name}} -p {{.local_port}}:{{.container_port}} -e WEBTEXT="{{ .WEBTEXT }}" {{.container_name}} # Run container with Doppler secret
+    vars:
+      doppler_token:
+        sh: aws ssm get-parameter --name "doppler_token" --query "Parameter.Value" --output text # Fetch Doppler token from AWS SSM
+      WEBTEXT:
+        sh: doppler secrets get WEBTEXT --plain --token {{ .doppler_token }} # Fetch WEBTEXT secret from Doppler
+
+  test:
+    desc: "Test the deployment"
+    dir: ./script
+    cmds:
+      - echo {{.Result}} # Output test result
+    vars:
+      Result:
+        sh: ./test.sh # Run test script
+
+  force_clean:
+    desc: "Stop and remove the all container"
+    cmds:
+      - docker stop $(docker ps -a) || true
+      - docker rm  -f $(docker ps -a) || true
+
+  images_clean:
+    desc: "remove the all images"
+    cmds:
+      - docker rmi  -f $(docker images) || true
+
+
+
+  deploy_app:
+    desc: "Run the application pipeline"
+    cmds:
+      - task: clean
+      - task: build
+      - task: lint
+      - task: deploywithdoppler
+      - task: test
+
