@@ -1,0 +1,27 @@
+name: Run Ansible with AWS Secret Key
+
+on:
+  workflow_dispatch:
+
+jobs:
+  ansible:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+
+      - name: Setup ssh-agent with key
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.PRIVATE_KEY }}
+
+      - name: Play Ansible Playbook
+        uses: arillso/action.playbook@master
+        with:
+          playbook: ansible/main.yaml      
+          inventory: ansible/dev
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
+          ANSIBLE_DEPRECATION_WARNINGS: 'false'
