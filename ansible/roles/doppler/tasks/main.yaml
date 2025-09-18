@@ -23,9 +23,9 @@
     dest: /etc/apt/sources.list.d/doppler-cli.list
   become: yes
 
-    #- name: Update apt cache after adding Doppler repository
-    #apt:
-    #update_cache: yes
+- name: Update apt cache after adding Doppler repository
+  apt:
+  update_cache: yes
 
 # Install Doppler CLI
 - name: Install Doppler
