@@ -4,9 +4,9 @@
   hosts: demo
   become: true
   roles:
-    # - aws
-    # - docker
-    # - task
-    # - git
+    - aws
+    - docker
+    - task
+    - git
     - doppler
 
