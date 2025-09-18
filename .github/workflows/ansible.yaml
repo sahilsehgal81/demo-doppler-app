@@ -11,6 +11,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Write private key to file
+        run: |
+          printf '%s\n' "${{ secrets.DEMO_TEST_PRIVATE_KEY }}" > private_key.pem
+          chmod 600 private_key.pem
+
+      - name: Expose private key content as action output
+        id: keyfile
+        run: |
+          # Write the full PEM into a multiline output variable
+          echo "key<<'EOF'" >> $GITHUB_OUTPUT
+          cat private_key.pem >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Read inventory file
         id: inventory
         run: |
