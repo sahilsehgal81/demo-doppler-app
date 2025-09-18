@@ -3,7 +3,6 @@ terraform {
     bucket  = "demo-doppler-app"
     key     = "demo-doppler-app-terraformstatefile"
     region  = "ap-south-1"
-    profile = "suraj"
   }
 
 }
