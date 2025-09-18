@@ -6,11 +6,12 @@
       - curl
       - gnupg
     state: present
-    update_cache: yes
+  # no update_cache here
 
 - name: Add Doppler GPG key
   shell: |
-    curl -sLf --retry 3 --tlsv1.2 --proto "=https" https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key \
+    curl -sLf --retry 3 --tlsv1.2 --proto "=https" \
+    https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key \
     | gpg --dearmor -o /usr/share/keyrings/doppler-archive-keyring.gpg
   args:
     creates: /usr/share/keyrings/doppler-archive-keyring.gpg
@@ -21,9 +22,10 @@
     content: |
       deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main
 
-- name: Update apt cache
+- name: Update apt cache (force apt-get)
   apt:
     update_cache: yes
+    force_apt_get: yes
 
 - name: Install Doppler
   apt:
