@@ -1,45 +1,19 @@
-- name: Ensure unzip available
-  apt:
-    name: unzip
-    state: present
-  become: true
-
-- name: Download AWS CLI v2 zip (if not already downloaded)
+- name: Download AWS CLI v2
   ansible.builtin.get_url:
     url: "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
     dest: "/tmp/awscliv2.zip"
-    mode: '0644'
-  args:
-    creates: "/tmp/awscliv2.zip"
-  become: true
 
-- name: Unarchive AWS CLI v2
+- name: install zip
+  apt:
+    name: zip
+    state: present
+
+- name: Unzip AWS CLI v2
   ansible.builtin.unarchive:
     src: "/tmp/awscliv2.zip"
     dest: "/tmp"
     remote_src: yes
-  args:
-    creates: "/tmp/aws/install"
-  become: true
 
-- name: Check for existing AWS CLI installation directory
-  ansible.builtin.stat:
-    path: /usr/local/aws-cli/v2/current
-  register: awscli_current
-  become: true
-
-- name: Install AWS CLI v2 (fresh)
+- name: Install AWS CLI v2
   ansible.builtin.command:
-    cmd: /tmp/aws/install
-  become: true
-  args:
-    creates: /usr/local/bin/aws
-  when: not awscli_current.stat.exists
-
-- name: Update AWS CLI v2 (if already installed)
-  ansible.builtin.command:
-    cmd: /tmp/aws/install --update
-  become: true
-  args:
-    creates: /usr/local/bin/aws
-  when: awscli_current.stat.exists
+    cmd: "/tmp/aws/install --update"
