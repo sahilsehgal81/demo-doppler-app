@@ -70,6 +70,6 @@ tasks:
       - task: clean
       - task: build
       - task: lint
-      - task: deploywithdoppler
+      - |
+        task deploywithdoppler || task deploy
       - task: test
-
