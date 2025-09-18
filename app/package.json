@@ -1,5 +1,5 @@
 {
-  "name": "node-hello",
+  "name": "webtext-app",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-  "url": "git+https://github.com/sahilsehgal81/node-hello.git#master"
+  "url": "git+https://github.com/sahilsehgal81/demo-doppler-app.git#main"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/sahilsehgal81/node-hello/issues"
+    "url": "https://github.com/sahilsehgal81/demo-doppler-app/issues"
   },
-  "homepage": "https://github.com/sahilsehgal81/node-hello#readme"
+  "homepage": "https://github.com/sahilsehgal81/demo-doppler-app#readme"
 }
