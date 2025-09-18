@@ -16,7 +16,7 @@ jobs:
         uses: dawidd6/action-ansible-playbook@v4
         with:
           playbook: ansible/main.yaml
-          inventory: ansible/dev
+          inventory: ansible/hosts.ini
           key: ${{ secrets.DEMO_TEST_PRIVATE_KEY }}
         env:
           ANSIBLE_HOST_KEY_CHECKING: 'false'
