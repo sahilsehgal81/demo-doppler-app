@@ -1,2 +1,4 @@
+node-1 ansible_ssh_host=65.0.52.55 ansible_user=ubuntu ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+
 [demo]
-23.22.135.212
+node-1
