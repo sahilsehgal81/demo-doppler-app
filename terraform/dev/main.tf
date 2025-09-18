@@ -1,15 +1,14 @@
 terraform {
   backend "s3" {
-    bucket  = "demo-terraformstatefile"
-    key     = "dev"
-    region  = "us-east-1"
+    bucket  = "demo-doppler-app"
+    key     = "demo-doppler-app-terraformstatefile"
+    region  = "ap-south-1"
     profile = "suraj"
   }
 
 }
 
 provider "aws" {
-  region  = "us-east-1"
-  profile = "suraj"
+  region  = "ap-south-1"
 }
 
