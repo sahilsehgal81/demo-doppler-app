@@ -8,8 +8,11 @@ const port = process.env.PORT || 3000;
 // Create HTTP server
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
-  // Respond with the value of the WEBTEXT environment variable
-  const msg = process.env.WEBTEXT;
+  // Respond with the value of the WEBTEXT environment variable, or 'Hello World' if blank/undefined
+  let msg = process.env.WEBTEXT;
+  if (!msg) {
+    msg = 'Hello World';
+  }
   res.end(msg);
 });
 
