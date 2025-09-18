@@ -11,7 +11,7 @@ const server = http.createServer((req, res) => {
   // Respond with the value of the WEBTEXT environment variable, or 'Hello World' if blank/undefined
   let msg = process.env.WEBTEXT;
   if (!msg) {
-    msg = 'Hello World';
+    msg = 'Hello World!';
   }
   res.end(msg);
 });
