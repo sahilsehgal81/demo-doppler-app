@@ -1,4 +1,4 @@
-- name: Ensure apt dependencies installed
+- name: Ensure dependencies are installed
   apt:
     name:
       - apt-transport-https
@@ -6,29 +6,17 @@
       - curl
       - gnupg
     state: present
+    update_cache: yes
   become: yes
 
-- name: Download Doppler GPG key temporarily
+- name: Download Doppler GPG key and dearmor
   get_url:
     url: "https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key"
-    dest: "/tmp/doppler.gpg"
+    dest: "/usr/share/keyrings/doppler-archive-keyring.gpg"
     mode: '0644'
   become: yes
 
-- name: Convert Doppler ASCII key to gpg keyring (dearmor)
-  command: >
-    gpg --dearmor --yes --output /usr/share/keyrings/doppler-archive-keyring.gpg /tmp/doppler.gpg
-  args:
-    creates: /usr/share/keyrings/doppler-archive-keyring.gpg
-  become: yes
-
-- name: Remove temporary key file
-  file:
-    path: /tmp/doppler.gpg
-    state: absent
-  become: yes
-
-- name: Add Doppler APT repository (uses signed-by)
+- name: Add Doppler APT repository
   copy:
     dest: /etc/apt/sources.list.d/doppler-cli.list
     content: |
@@ -36,10 +24,9 @@
     mode: '0644'
   become: yes
 
-- name: Update apt cache (retry-friendly)
+- name: Update apt cache
   apt:
     update_cache: yes
-    cache_valid_time: 3600
   become: yes
 
 - name: Install Doppler CLI
