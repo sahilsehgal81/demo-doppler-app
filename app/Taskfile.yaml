@@ -30,7 +30,7 @@ tasks:
   deploy:
     desc: "Run the {{.container_name}} container locally"
     cmds:
-      - docker run -d --name {{ .container_name}} -p {{.local_port}}:{{.container_port}} -e WEBTEXT="Development deploy without doppler" {{.container_name}} # Run container without Doppler
+      - docker run -d --name {{ .container_name}} -p {{.local_port}}:{{.container_port}} {{.container_name}} # Run container without Doppler
 
   deploywithdoppler:
     desc: "Run the {{.container_name}} container with Doppler"
