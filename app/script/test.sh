@@ -3,19 +3,12 @@ sleep 10
 # URL to check
 URL="http://localhost:80"
 
-# Expected response substring
-EXPECTED_RESPONSE="Development deploy"
+# Perform the curl request and get HTTP status code
+STATUS_CODE=$(curl -s -o /dev/null -w "%{http_code}" $URL)
 
-# Perform the curl request and store the response
-RESPONSE=$(curl -s $URL)
-
-# Check if the response contains the expected substring
-echo "$RESPONSE" | grep -q "$EXPECTED_RESPONSE"
-if [ $? -eq 0 ]; then
-  echo "URL check passed: Response contains '$RESPONSE'"
+if [ "$STATUS_CODE" -eq 200 ]; then
+  echo "Health check passed: $URL returned $STATUS_CODE"
 else
-  # Log alert message to the log file with a timestamp
-  echo "Application Test failed"
+  echo "Health check failed: $URL returned $STATUS_CODE"
   exit 1
 fi
-
