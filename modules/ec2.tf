@@ -17,7 +17,7 @@ resource "aws_instance" "frontend" {
     delete_on_termination = var.delete_on_termination # Delete volume on termination
   }
   
-  iam_instance_profile   = var.iam_role # IAM role for the instance
+  iam_instance_profile   = aws_iam_instance_profile.ec2_profile.name
 
   tags = {
     Name = "${var.env}-${var.project}" # Tag for identification
