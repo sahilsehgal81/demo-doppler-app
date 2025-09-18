@@ -1,3 +1,4 @@
+
 name: Run Ansible with AWS Secret Key
 
 on:
@@ -11,18 +12,19 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
-      - name: Setup ssh-agent with key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.PRIVATE_KEY }}
-
-
-      - name: Ready-to-use Ansible-Playbook environment
-        uses: SakulFlee/GitHub-Action-Ansible@v0.0.1
-        with:
-          playbook_file: main.yaml
-          inventory_file: hosts.ini
-          working_directory: ansible
-
+      - name: Read inventory file
+        id: inventory
+        run: |
+          echo "content<<EOF" >> $GITHUB_OUTPUT
+          cat ansible/hosts.ini >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
           
-
+      - name: Run Ansible playbook
+        uses: dawidd6/action-ansible-playbook@v4
+        with:
+          playbook: ansible/main.yaml
+          inventory: ${{ steps.inventory.outputs.content }}
+          key: ${{ secrets.PRIVATE_KEY }}
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
+          ANSIBLE_DEPRECATION_WARNINGS: 'false'
