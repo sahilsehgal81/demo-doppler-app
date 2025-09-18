@@ -18,7 +18,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.PRIVATE_KEY }}
           port: 22
-          source: "*"
+          source: "app/*"
           target: /home/ubuntu/app/
           rm: true
 
