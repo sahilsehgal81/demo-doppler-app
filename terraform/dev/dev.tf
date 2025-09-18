@@ -18,7 +18,6 @@ module "frontend" {
   ssh_cidr_block        = ["0.0.0.0/0"]
   web_ports             = [80, 443]
   web_cidr_blocks       = ["0.0.0.0/0"]
-#  iam_role              = "ssm_parameter"
 }
 
 
