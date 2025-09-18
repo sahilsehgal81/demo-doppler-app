@@ -1,4 +1,4 @@
-- name: Ensure dependencies are installed
+- name: Ensure dependencies are present
   apt:
     name:
       - apt-transport-https
@@ -7,30 +7,25 @@
       - gnupg
     state: present
     update_cache: yes
-  become: yes
 
-- name: Download Doppler GPG key and dearmor
-  get_url:
-    url: "https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key"
-    dest: "/usr/share/keyrings/doppler-archive-keyring.gpg"
-    mode: '0644'
-  become: yes
+- name: Add Doppler GPG key
+  shell: |
+    curl -sLf --retry 3 --tlsv1.2 --proto "=https" https://packages.doppler.com/public/cli/gpg.DE2A7741A397C129.key \
+    | gpg --dearmor -o /usr/share/keyrings/doppler-archive-keyring.gpg
+  args:
+    creates: /usr/share/keyrings/doppler-archive-keyring.gpg
 
-- name: Add Doppler APT repository
+- name: Add Doppler APT repo
   copy:
     dest: /etc/apt/sources.list.d/doppler-cli.list
     content: |
       deb [signed-by=/usr/share/keyrings/doppler-archive-keyring.gpg] https://packages.doppler.com/public/cli/deb/debian any-version main
-    mode: '0644'
-  become: yes
 
 - name: Update apt cache
   apt:
     update_cache: yes
-  become: yes
 
-- name: Install Doppler CLI
+- name: Install Doppler
   apt:
     name: doppler
     state: present
-  become: yes
