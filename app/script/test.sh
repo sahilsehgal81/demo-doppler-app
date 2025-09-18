@@ -4,7 +4,7 @@ sleep 10
 URL="http://localhost:80"
 
 # Expected response substring
-EXPECTED_RESPONSE="Development deploy"
+EXPECTED_RESPONSE="Hello Doppler!"
 
 # Perform the curl request and store the response
 RESPONSE=$(curl -s $URL)
