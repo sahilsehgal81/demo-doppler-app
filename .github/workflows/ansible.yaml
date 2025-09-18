@@ -1,5 +1,5 @@
 
-name: Run Ansible with AWS Secret Key
+name: Run Ansible
 
 on:
   workflow_dispatch:
